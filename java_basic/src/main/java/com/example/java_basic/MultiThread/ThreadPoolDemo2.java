@@ -1,7 +1,9 @@
 package com.example.java_basic.MultiThread;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -10,6 +12,12 @@ public class ThreadPoolDemo2 {
     public static void main(String[] args) {
         ThreadPoolExecutor executor = new ThreadPoolExecutor(5, 20, 60, TimeUnit.SECONDS,
                 new LinkedBlockingQueue<>(2000), new ThreadPoolExecutor.AbortPolicy());
+
+        Map<Long, String> map = new HashMap<>();
+        map.put(1L, "A");
+        map.put(null, "B");
+        System.out.println(map.getOrDefault(1L, null));
+        System.out.println(map.getOrDefault(null, null));
 
         Inner inner = new Inner();
 
