@@ -1,20 +1,22 @@
 package com.example.java_basic.MultiThread;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class AtomicDemo {
     // plan A
     AtomicInteger count = new AtomicInteger(0);
-    List<Integer> arrays = new ArrayList<>();
+    Set<Integer> set = new HashSet<>();
 
-    public void addTo(int total) {
-        while (count.get() < total) {
+    public void addToTotal() {
+        while (count.get() < 1000) {
 //            System.out.println(i);
             int value = count.incrementAndGet();
-            arrays.add(value);
+            set.add(value);
             System.out.println(Thread.currentThread().getName() + ":" + value);
 //            if (value == total) {
 //                System.out.println("end");
@@ -45,15 +47,13 @@ public class AtomicDemo {
         long startTime = System.currentTimeMillis();
         int i = 0;
         while (i++ < 10) {
-            executor.execute(() -> {
-                atomicDemo.addTo(1000);
-            });
+            executor.execute(atomicDemo::addToTotal);
         }
         executor.shutdown();
         while (!executor.isTerminated()) ;
         long endTime = System.currentTimeMillis();
         System.out.println("duration : " + (endTime - startTime) + "ms");
         System.out.println("count = " + atomicDemo.count.get());
-        System.out.println("array size = " + atomicDemo.arrays.size());
+        System.out.println("set size = " + atomicDemo.set.size());
     }
 }
