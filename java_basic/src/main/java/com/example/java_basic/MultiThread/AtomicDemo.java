@@ -1,19 +1,22 @@
 package com.example.java_basic.MultiThread;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class AtomicDemo {
     // plan A
     AtomicInteger count = new AtomicInteger(0);
+    List<Integer> arrays = new ArrayList<>();
 
-    public void add(int num) {
-        int i = 0;
-        while (i++ < num) {
+    public void addTo(int total) {
+        while (count.get() < total) {
 //            System.out.println(i);
             int value = count.incrementAndGet();
+            arrays.add(value);
             System.out.println(Thread.currentThread().getName() + ":" + value);
-//            if (value == num) {
+//            if (value == total) {
 //                System.out.println("end");
 //            }
         }
@@ -43,7 +46,7 @@ public class AtomicDemo {
         int i = 0;
         while (i++ < 10) {
             executor.execute(() -> {
-                atomicDemo.add(100);
+                atomicDemo.addTo(1000);
             });
         }
         executor.shutdown();
@@ -51,5 +54,6 @@ public class AtomicDemo {
         long endTime = System.currentTimeMillis();
         System.out.println("duration : " + (endTime - startTime) + "ms");
         System.out.println("count = " + atomicDemo.count.get());
+        System.out.println("array size = " + atomicDemo.arrays.size());
     }
 }
