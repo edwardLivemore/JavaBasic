@@ -28,17 +28,11 @@ public class ThreadPoolDemo {
 //        executor2.shutdown();
 //        while (!executor2.isTerminated());
 
-        long end = System.currentTimeMillis();
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-        System.out.println(end - start + "ms");
-
         executor1.shutdown();
         executor2.shutdown();
         scheduledExecutorService.shutdown();
+        long end = System.currentTimeMillis();
+        System.out.println(end - start + "ms");
     }
 
     public static ThreadPoolExecutor getExecutor(){
