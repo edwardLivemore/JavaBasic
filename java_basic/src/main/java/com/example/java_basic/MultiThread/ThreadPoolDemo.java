@@ -3,32 +3,42 @@ package com.example.java_basic.MultiThread;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Random;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.*;
 import java.util.concurrent.ThreadPoolExecutor.AbortPolicy;
-import java.util.concurrent.TimeUnit;
 
+@Slf4j
 public class ThreadPoolDemo {
     public static void main(String[] args) {
         ThreadPoolExecutor executor1 = ThreadPoolDemo.getExecutor();
         ThreadPoolExecutor executor2 = ThreadPoolDemo.getExecutor();
+        ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(3);
+        scheduledExecutorService.schedule(() -> log.info("scheduled pool executed"), 3, TimeUnit.SECONDS);
 
         long start = System.currentTimeMillis();
 
-        for(int i = 0; i < 10000; i++) {
+        for(int i = 0; i < 10; i++) {
             executor1.execute(MyClass::showNum);
         }
-        executor1.shutdown();
-        while (!executor1.isTerminated());
+//        executor1.shutdown();
+//        while (!executor1.isTerminated());
 
-        for(int i = 0; i < 10000; i++) {
+        for(int i = 0; i < 10; i++) {
             executor2.execute(MyClass::showNum);
         }
-        executor2.shutdown();
-        while (!executor2.isTerminated());
+//        executor2.shutdown();
+//        while (!executor2.isTerminated());
 
         long end = System.currentTimeMillis();
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
         System.out.println(end - start + "ms");
+
+        executor1.shutdown();
+        executor2.shutdown();
+        scheduledExecutorService.shutdown();
     }
 
     public static ThreadPoolExecutor getExecutor(){
