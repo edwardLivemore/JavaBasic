@@ -1,17 +1,17 @@
 package com.example.java_basic.MultiThread;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import lombok.extern.slf4j.Slf4j;
+
+import java.util.*;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+@Slf4j
 public class ThreadPoolDemo2 {
     public static void main(String[] args) {
         ThreadPoolExecutor executor = new ThreadPoolExecutor(5, 20, 60, TimeUnit.SECONDS,
-                new LinkedBlockingQueue<>(2000), new ThreadPoolExecutor.AbortPolicy());
+                new LinkedBlockingQueue<>(100), new ThreadPoolExecutor.AbortPolicy());
 
         Map<Long, String> map = new HashMap<>();
         map.put(1L, "A");
@@ -28,23 +28,24 @@ public class ThreadPoolDemo2 {
         }
 
         long start = System.currentTimeMillis();
-        for (int i = 0; i < count; i++) {
-            int finalI = i;
-            executor.execute(() -> inner.showNum(finalI));
-        }
 
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+        for (int i = 0; i < 10; i++) {
+            int index = i;
+            executor.execute(() -> inner.showNum(list, index));
         }
+        executor.shutdown();
+
         long end = System.currentTimeMillis();
-        System.out.println("done, cost : " + (end - start) + "ms");
+        log.info("done, cost : {} ms", end - start);
     }
 }
 
+@Slf4j
 class Inner {
-    public void showNum(int i) {
-        System.out.println(i);
+    public void showNum(List<Integer> list, int index) {
+        if (index == 3) {
+            throw new RuntimeException("Exception occurred");
+        }
+        list.forEach(x -> log.info("{}", x));
     }
 }
