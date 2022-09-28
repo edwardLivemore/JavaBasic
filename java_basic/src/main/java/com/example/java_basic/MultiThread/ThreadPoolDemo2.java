@@ -6,6 +6,7 @@ import java.util.*;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.IntStream;
 
 @Slf4j
 public class ThreadPoolDemo2 {
@@ -19,20 +20,11 @@ public class ThreadPoolDemo2 {
         System.out.println(map.getOrDefault(1L, null));
         System.out.println(map.getOrDefault(null, null));
 
-        Inner inner = new Inner();
-
-        List<Integer> list = new ArrayList<>();
-        int count = 1000;
-        for (int i = 0; i < count; i++) {
-            list.add(i);
-        }
-
         long start = System.currentTimeMillis();
+        Inner inner = new Inner();
+        int[] array = IntStream.range(0, 1000).toArray();
 
-        for (int i = 0; i < 10; i++) {
-            int index = i;
-            executor.execute(() -> inner.showNum(list, index));
-        }
+        IntStream.range(0, 10).forEach(index -> executor.execute(() -> inner.showNum(array, index)));
         executor.shutdown();
 
         long end = System.currentTimeMillis();
@@ -42,10 +34,12 @@ public class ThreadPoolDemo2 {
 
 @Slf4j
 class Inner {
-    public void showNum(List<Integer> list, int index) {
+    public void showNum(int[] array, int index) {
         if (index == 3) {
             throw new RuntimeException("Exception occurred");
         }
-        list.forEach(x -> log.info("{}", x));
+        for (int num : array) {
+            log.info("index: {}, value: {}", index, num);
+        }
     }
 }
