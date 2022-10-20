@@ -43,5 +43,6 @@ public class SychronizedDemo2 {
                 }
             });
         }
+        executorService.shutdown();
     }
 }
