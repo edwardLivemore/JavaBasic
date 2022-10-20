@@ -26,6 +26,7 @@ public class SychronizedDemo2 {
                 strList.wait();
                 log.info("Line BBB, {}", Thread.currentThread().getName());
             }
+            log.info("important process, {}", Thread.currentThread().getName());
             strList.notifyAll();
         }
     }
