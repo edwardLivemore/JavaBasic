@@ -27,18 +27,24 @@ public class AtomicDemo {
 ////                System.out.println("end");
 ////            }
 //        }
-
+        int value;
         while (true) {
-            if (count.incrementAndGet() <= 100000) {
-                int value = count.get();
+            if (count.incrementAndGet() <= 100) {
+                value = count.get();
 //                log.info("{}", value);
 //                list.add(value);
 //                vector.add(value);
+                log.info("{}: value: {}", Thread.currentThread().getName(), value);
                 copyOnWriteArrayList.add(value);
             } else {
+                log.info("break value:{}", count.get());
                 break;
             }
         }
+
+        AtomicInteger v = new AtomicInteger();
+        copyOnWriteArrayList.parallelStream().forEach(x ->
+                log.info("{}: v: {}", Thread.currentThread().getName(), v.getAndIncrement()));
     }
 
     // plan B
