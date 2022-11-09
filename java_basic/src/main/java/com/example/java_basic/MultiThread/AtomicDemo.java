@@ -61,6 +61,11 @@ public class AtomicDemo {
 //    }
 
     public static void main(String[] args) {
+        List<String> settNos = new ArrayList<>();
+        settNos.add("1");
+        settNos.add("2");
+        System.out.println(String.join(",", settNos));
+
         AtomicDemo atomicDemo = new AtomicDemo();
 
         ThreadPoolExecutor executor = new ThreadPoolExecutor(10, 20,
