@@ -5,19 +5,35 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
 public class test {
     public static void main(String[] args) {
-//        List<String> settNos = new ArrayList<>();
-//        settNos.add("1");
-//        settNos.add("2");
-//        System.out.println(String.join(",", settNos));
+//        stringJoin();
+//        mapChange();
+        setOp();
+    }
 
+    private static void setOp() {
+        Set<String> setA = new HashSet<>();
+        Set<String> setB = new HashSet<>();
+
+        setA.add("1");
+        setA.add("2");
+
+        setB.add("2");
+        setB.add("3");
+
+        setA.retainAll(setB);
+
+        for (String s : setA) {
+            log.info(s);
+        }
+    }
+
+    private static void mapChange() {
         List<TestA> list = new ArrayList<>();
         list.add(new TestA(1, 1));
         list.add(new TestA(2, 2));
@@ -28,6 +44,13 @@ public class test {
         for (Map.Entry<Integer, TestA> entry : map.entrySet()) {
             log.info("key: {}, value: {}", entry.getKey(), entry.getValue());
         }
+    }
+
+    private static void stringJoin() {
+        List<String> settNos = new ArrayList<>();
+        settNos.add("1");
+        settNos.add("2");
+        System.out.println(String.join(",", settNos));
     }
 
     @Data
