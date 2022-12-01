@@ -13,21 +13,6 @@ public class TreeTest {
     // Map(K: 节点id, V: 子节点名称集合)
     Map<String, Set<TreeNode>> map = new HashMap<>();
 
-    private void tree() {
-        // 构建数据
-        List<String> data = new ArrayList<>();
-        data.add("1.1");
-        data.add("2.2");
-        data.add("1");
-        data.add("2");
-
-        // 构建树
-        buildTree(data);
-
-        // 输出树
-        output(null);
-    }
-
     private void output(String pid) {
         Set<TreeNode> children = map.get(pid);
         if (children != null) {
@@ -85,11 +70,6 @@ public class TreeTest {
         map.put(node.getPid(), childrenSet);
     }
 
-    public static void main(String[] args) {
-        TreeTest test = new TreeTest();
-        test.tree();
-    }
-
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
@@ -103,5 +83,20 @@ public class TreeTest {
         private String name;
         // 层级
         private Integer level;
+    }
+
+    public static void main(String[] args) {
+        // 构建数据
+        List<String> data = new ArrayList<>();
+        data.add("1");
+        data.add("2");
+        data.add("1.1");
+        data.add("2.1");
+        data.add("1.1.1");
+        data.add("2.1.1");
+
+        TreeTest test = new TreeTest();
+        test.buildTree(data);
+        test.output(null);
     }
 }
