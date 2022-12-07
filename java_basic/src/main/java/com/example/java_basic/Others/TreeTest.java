@@ -48,9 +48,9 @@ public class TreeTest {
 
         String name = nodes[level - 1];
         Set<TreeNode> childrenSet = map.getOrDefault(pNode.getId(), new HashSet<>());
-        for (TreeNode node : childrenSet) {
-            if (node.getName().equals(name)) {
-                return node;
+        for (TreeNode child : childrenSet) {
+            if (child.getName().equals(name)) {
+                return child;
             }
         }
 
