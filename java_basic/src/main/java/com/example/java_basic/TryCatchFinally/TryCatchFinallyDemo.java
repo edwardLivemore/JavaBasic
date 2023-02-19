@@ -4,8 +4,20 @@ public class TryCatchFinallyDemo {
     public static void main(String[] args) throws MyException {
 //        demo1();
 
-        int i = demo2();
-        System.out.println(i);
+//        int i = demo2();
+//        System.out.println(i);
+
+        demo3();
+    }
+
+    private static void demo3() {
+        Long num = 0L;
+        try {
+            throw new Exception();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        System.out.println(num);
     }
 
     private static int demo2() {
