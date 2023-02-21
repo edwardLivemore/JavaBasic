@@ -1,5 +1,8 @@
 package com.example.java_basic.TryCatchFinally;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class TryCatchFinallyDemo {
     public static void main(String[] args) throws MyException {
 //        demo1();
@@ -7,7 +10,28 @@ public class TryCatchFinallyDemo {
 //        int i = demo2();
 //        System.out.println(i);
 
-        demo3();
+//        demo3();
+
+        demo4();
+    }
+
+    private static void demo4() {
+        List<Integer> arrays = new ArrayList<>();
+        arrays.add(0);
+        arrays.add(1);
+        arrays.add(2);
+
+        for (Integer num : arrays) {
+            try {
+                if (num == 1) {
+                    throw new Exception();
+                }
+                System.out.println(num);
+            } catch (Exception e) {
+                e.printStackTrace();
+                continue;
+            }
+        }
     }
 
     private static void demo3() {
