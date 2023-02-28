@@ -1,6 +1,7 @@
 package com.example.java_basic.MultiThread;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.concurrent.CustomizableThreadFactory;
 
 import java.util.*;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -12,7 +13,8 @@ import java.util.stream.IntStream;
 public class ThreadPoolDemo2 {
     public static void main(String[] args) {
         ThreadPoolExecutor executor = new ThreadPoolExecutor(5, 20, 60, TimeUnit.SECONDS,
-                new LinkedBlockingQueue<>(100), new ThreadPoolExecutor.AbortPolicy());
+                new LinkedBlockingQueue<>(100), new CustomizableThreadFactory("my-thread-pool"),
+                new ThreadPoolExecutor.AbortPolicy());
 
         Map<Long, String> map = new HashMap<>();
         map.put(1L, "A");
