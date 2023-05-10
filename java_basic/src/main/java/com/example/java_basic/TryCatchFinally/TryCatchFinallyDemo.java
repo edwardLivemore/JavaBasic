@@ -29,7 +29,6 @@ public class TryCatchFinallyDemo {
                 System.out.println(num);
             } catch (Exception e) {
                 e.printStackTrace();
-                continue;
             }
         }
     }
