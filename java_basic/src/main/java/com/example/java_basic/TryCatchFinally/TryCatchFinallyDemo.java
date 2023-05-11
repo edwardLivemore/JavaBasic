@@ -3,6 +3,7 @@ package com.example.java_basic.TryCatchFinally;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class TryCatchFinallyDemo {
     public static void main(String[] args) throws MyException {
 //        demo1();
@@ -12,7 +13,13 @@ public class TryCatchFinallyDemo {
 
 //        demo3();
 
-        demo4();
+//        demo4();
+
+        demo5();
+    }
+
+    private static void demo5() {
+        int a = 1 / 0;
     }
 
     private static void demo4() {
@@ -74,6 +81,6 @@ public class TryCatchFinallyDemo {
 
 class MyException extends Exception{
     public MyException(String msg){
-        System.out.println(msg);
+//        System.out.println(msg);
     }
 }
