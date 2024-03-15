@@ -12,13 +12,14 @@ import java.util.concurrent.TimeUnit;
 
 public class CountDownLatchDemo {
     public static void main(String[] args) {
-        CountDownLatch latch = new CountDownLatch(5);
+        CountDownLatch latch = new CountDownLatch(100);
         A a = new A();
-        ThreadPoolExecutor executor = new ThreadPoolExecutor(2, 2, 10, TimeUnit.SECONDS,
+        ThreadPoolExecutor executor = new ThreadPoolExecutor(10, 10, 10, TimeUnit.SECONDS,
                 new ArrayBlockingQueue<>(100), new CustomizableThreadFactory("myPool-"), new ThreadPoolExecutor.AbortPolicy());
 
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 100; i++) {
             executor.execute(() -> {
+                System.out.println(Thread.currentThread().getName() + " current num: " + a.getNum());
                 a.add();
                 latch.countDown();
             });
@@ -36,12 +37,13 @@ public class CountDownLatchDemo {
 
 class A {
     private int num = 0;
+
     synchronized int getNum() {
         return this.num;
     }
 
     synchronized void add() {
         this.num++;
-        System.out.println("add: " + Thread.currentThread().getName() + " num: " + getNum());
+        System.out.println("add: " + Thread.currentThread().getName() + " num: " + this.num);
     }
 }

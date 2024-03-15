@@ -15,8 +15,9 @@ public class ThreadLocalDemo {
             try {
                 tl.set("done");
                 r = tl.get();
+                System.out.println("tl.get(): " + r);
                 System.out.println("thread: " + Thread.currentThread().getName() + " running...");
-                System.out.println("r == tl.get() ? " + r == tl.get());
+                System.out.println("r == tl.get() ? " + r.equals(tl.get()));
             } finally {
                 tl.remove();
             }
