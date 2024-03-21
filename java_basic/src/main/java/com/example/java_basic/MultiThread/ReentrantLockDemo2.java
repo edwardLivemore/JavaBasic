@@ -17,11 +17,9 @@ public class ReentrantLockDemo2 {
                 new LinkedBlockingDeque<>(10), new ThreadPoolExecutor.AbortPolicy());
 
         int i = 0;
-        while (i++ < 10){
+        while (i++ < 10) {
             executor.execute(() -> {
-                if (from.getBalance() > 10){
-                    from.transfer(to, 10);
-                }
+                from.transfer(to, 10);
                 latch.countDown();
             });
         }
@@ -38,27 +36,27 @@ public class ReentrantLockDemo2 {
     }
 }
 
-class Account2{
+class Account2 {
     private int balance;
     private Allocator2 allocator = Allocator2.getInstance();
 
-    public Account2(int balance){
+    public Account2(int balance) {
         this.balance = balance;
     }
 
-    public synchronized int getBalance(){
+    public synchronized int getBalance() {
         return this.balance;
     }
 
-    public void transfer(Account2 target, int money){
+    public void transfer(Account2 target, int money) {
         allocator.apply(this, target);
 
         try {
-            synchronized (this){
-                synchronized (target){
+            synchronized (this) {
+                synchronized (target) {
                     System.out.println(Thread.currentThread().getName() + " Before from.balance : " + this.balance);
                     System.out.println(Thread.currentThread().getName() + " Before to.balance : " + target.balance);
-                    if(balance >= money){
+                    if (balance >= money) {
                         balance -= money;
                         target.balance += money;
                         System.out.println(Thread.currentThread().getName() + " After from.balance : " + this.balance);
@@ -66,7 +64,7 @@ class Account2{
                     }
                 }
             }
-        }finally {
+        } finally {
             allocator.free(this, target);
         }
     }
@@ -77,20 +75,21 @@ class Allocator2 {
     private final Condition condition = lock.newCondition();
     private final List<Account2> als = new ArrayList<>();
 
-    private Allocator2(){}
+    private Allocator2() {
+    }
 
-    public static Allocator2 getInstance(){
+    public static Allocator2 getInstance() {
         return Allocator2Holder.INSTANCE;
     }
 
-    private static class Allocator2Holder{
+    private static class Allocator2Holder {
         private final static Allocator2 INSTANCE = new Allocator2();
     }
 
-    public void apply(Account2 from, Account2 to){
+    public void apply(Account2 from, Account2 to) {
         lock.lock();
         try {
-            while (als.contains(from) || als.contains(to)){
+            while (als.contains(from) || als.contains(to)) {
                 condition.await();
             }
             als.add(from);
@@ -102,13 +101,13 @@ class Allocator2 {
         }
     }
 
-    public void free(Account2 from, Account2 to){
+    public void free(Account2 from, Account2 to) {
         lock.lock();
         try {
             als.remove(from);
             als.remove(to);
             condition.signalAll();
-        }finally {
+        } finally {
             lock.unlock();
         }
     }
