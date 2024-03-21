@@ -8,6 +8,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class ReentrantLockDemo2 {
     public static void main(String[] args) {
+        CountDownLatch latch = new CountDownLatch(10);
         Account2 from = new Account2(100);
         Account2 to = new Account2(0);
 
@@ -18,10 +19,19 @@ public class ReentrantLockDemo2 {
         int i = 0;
         while (i++ < 10){
             executor.execute(() -> {
-                while (from.getBalance() > 10){
+                if (from.getBalance() > 10){
                     from.transfer(to, 10);
                 }
+                latch.countDown();
             });
+        }
+
+        try {
+            latch.await();
+            System.out.println("from money: " + from.getBalance());
+            System.out.println("to money: " + to.getBalance());
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
 
         executor.shutdown();
@@ -41,7 +51,7 @@ class Account2{
     }
 
     public void transfer(Account2 target, int money){
-        while (!allocator.apply(this, target));
+        allocator.apply(this, target);
 
         try {
             synchronized (this){
@@ -60,8 +70,6 @@ class Account2{
             allocator.free(this, target);
         }
     }
-
-
 }
 
 class Allocator2 {
@@ -79,7 +87,7 @@ class Allocator2 {
         private final static Allocator2 INSTANCE = new Allocator2();
     }
 
-    public boolean apply(Account2 from, Account2 to){
+    public void apply(Account2 from, Account2 to){
         lock.lock();
         try {
             while (als.contains(from) || als.contains(to)){
@@ -87,13 +95,11 @@ class Allocator2 {
             }
             als.add(from);
             als.add(to);
-            return true;
         } catch (InterruptedException e) {
             e.printStackTrace();
         } finally {
             lock.unlock();
         }
-        return false;
     }
 
     public void free(Account2 from, Account2 to){
