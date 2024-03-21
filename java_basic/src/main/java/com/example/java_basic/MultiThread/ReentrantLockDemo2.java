@@ -38,32 +38,29 @@ public class ReentrantLockDemo2 {
 
 class Account2 {
     private int balance;
-    private Allocator2 allocator = Allocator2.getInstance();
+    private final Allocator2 allocator = Allocator2.getInstance();
 
     public Account2(int balance) {
         this.balance = balance;
     }
 
-    public synchronized int getBalance() {
+    public int getBalance() {
         return this.balance;
     }
+
 
     public void transfer(Account2 target, int money) {
         allocator.apply(this, target);
 
         try {
-            synchronized (this) {
-                synchronized (target) {
-                    System.out.println(Thread.currentThread().getName() + " Before from.balance : " + this.balance);
-                    System.out.println(Thread.currentThread().getName() + " Before to.balance : " + target.balance);
-                    if (balance >= money) {
-                        balance -= money;
-                        target.balance += money;
-                        System.out.println(Thread.currentThread().getName() + " After from.balance : " + this.balance);
-                        System.out.println(Thread.currentThread().getName() + " After to.balance : " + target.balance);
-                    }
-                }
+            System.out.println(Thread.currentThread().getName() + " Before from.balance : " + this.balance + ",  Before to.balance : " + target.balance);
+            if (balance >= money) {
+                balance -= money;
+                target.balance += money;
+                System.out.println(Thread.currentThread().getName() + " After from.balance : " + this.balance + ",  After to.balance : " + target.balance);
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         } finally {
             allocator.free(this, target);
         }
