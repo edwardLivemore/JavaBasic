@@ -20,12 +20,16 @@ public class RemoveDuplicates {
 
         int slow = 0;
         for (int fast = 1; fast < nums.length; fast++) {
-            if (nums[fast] == nums[slow]) {
-                if (fast + 1 < nums.length) {
-                    nums[slow + 1] = nums[fast + 1];
-                }
-            } else {
+//            if (nums[fast] == nums[slow]) {
+//                if (fast + 1 < nums.length) {
+//                    nums[slow + 1] = nums[fast + 1];
+//                }
+//            } else {
+//                slow++;
+//            }
+            if (nums[fast] != nums[slow]) {
                 slow++;
+                nums[slow] = nums[fast];
             }
         }
         return slow + 1;
