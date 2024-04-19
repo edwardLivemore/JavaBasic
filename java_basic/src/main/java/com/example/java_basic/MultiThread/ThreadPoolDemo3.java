@@ -2,8 +2,6 @@ package com.example.java_basic.MultiThread;
 
 import org.springframework.scheduling.concurrent.CustomizableThreadFactory;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Vector;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.LinkedBlockingQueue;
