@@ -2,15 +2,17 @@ package com.example.java_basic.MultiThread;
 
 import org.springframework.scheduling.concurrent.CustomizableThreadFactory;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Vector;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class ThreadPoolDemo3 {
     public static void main(String[] args) {
-        AtomicInteger integer = new AtomicInteger(0);
+        Vector<Integer> result = new Vector<>();
         CountDownLatch latch = new CountDownLatch(5);
 
         ThreadPoolExecutor executor = new ThreadPoolExecutor(4, 5, 60, TimeUnit.SECONDS,
@@ -18,7 +20,7 @@ public class ThreadPoolDemo3 {
                 new ThreadPoolExecutor.AbortPolicy());
 
         for(int i = 0; i < 5; i++) {
-            executor.execute(new MyTask(integer, latch));
+            executor.execute(new MyTask(i, result, latch));
         }
 
         try {
@@ -27,22 +29,24 @@ public class ThreadPoolDemo3 {
             throw new RuntimeException(e);
         }
 
-        System.out.println("result: " + integer.get());
+        System.out.println("result: " + result);
     }
 }
 
 class MyTask implements Runnable {
-    private AtomicInteger i;
+    private int i;
+    private Vector<Integer> list;
     private CountDownLatch latch;
 
-    public MyTask (AtomicInteger i, CountDownLatch latch) {
+    public MyTask (int i, Vector<Integer> list, CountDownLatch latch) {
         this.i = i;
+        this.list = list;
         this.latch = latch;
     }
 
     @Override
     public void run() {
-        i.getAndIncrement();
+        list.add(i);
         latch.countDown();
     }
 }
